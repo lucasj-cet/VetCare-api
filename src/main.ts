@@ -17,7 +17,7 @@ async function bootstrap() {
 
 app.enableCors({
   origin: [process.env.CORS_ORIGINS_DEV, process.env.CORS_ORIGINS_PROD].filter((o): o is string => Boolean(o),),
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Authorization', 'Content-Type'],
   maxAge: 600,
 });
