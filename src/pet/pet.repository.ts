@@ -3,6 +3,7 @@ import { Prisma } from '../generated/prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePetDto } from './dto/create-pet.dto';
 import { UpdatePetDto } from './dto/update-pet.dto';
+import { CreatePetWithOwnerDto } from '../pet-owner/dto/create-pet-with-owner.dto';
 
 const withOwner = { petOwner: true } satisfies Prisma.PetInclude;
 
@@ -67,9 +68,10 @@ export class PetRepository {
     });
   }
 
- createMany(petOwnerId: string, pets: Omit<CreatePetDto, 'petOwnerId'>[]) {
-  return this.prisma.pet.createMany({
-    data: pets.map(({ birthDate, notes, ...rest }) => ({
+ createMany(petOwnerId: string, pets: CreatePetWithOwnerDto[]) {
+
+  return this.prisma.pet.createMany(
+    {data: pets.map(({ birthDate, notes, ...rest }) => ({
       ...rest,
       birthDate: new Date(birthDate),
       notes: notes || null,

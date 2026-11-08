@@ -52,6 +52,7 @@ export class CreatePetDto {
     type: String,
     format: 'date',
   })
+  @IsNotEmpty()
   @IsDateString()
   birthDate: string;
 

@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { IsArray, IsEmail, IsNotEmpty, IsOptional, IsString, Matches, ValidateNested } from 'class-validator';
 import { CreatePetDto } from '../../pet/dto/create-pet.dto';
-import { CreatePetWithOwner } from './create-pet-with-owner.dto';
+import { CreatePetWithOwnerDto } from './create-pet-with-owner.dto';
 
 export class CreatePetOwnerDto {
   @ApiProperty({ description: 'Nome completo do proprietário', example: 'Maria da Silva' })
@@ -32,10 +32,10 @@ export class CreatePetOwnerDto {
   @IsNotEmpty()
   address: string;
 
-  @ApiPropertyOptional({ description: 'Lista opcional de pets associados ao proprietário', type: () => [CreatePetDto] })
+  @ApiPropertyOptional({ description: 'Lista opcional de pets associados ao proprietário', type: () => [CreatePetWithOwnerDto] })
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreatePetWithOwner)
-  pets?: CreatePetWithOwner[];
+  @Type(() => CreatePetWithOwnerDto)
+  pets?: CreatePetWithOwnerDto[];
 }

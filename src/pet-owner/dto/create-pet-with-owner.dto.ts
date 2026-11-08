@@ -1,6 +1,6 @@
-import { OmitType, PartialType } from "@nestjs/swagger";
-import { ResponsePetDto } from "../../pet/dto/response-pet.dto";
+import { OmitType} from "@nestjs/swagger";
+import { CreatePetDto } from "../../pet/dto/create-pet.dto";
 
-export class CreatePetWithOwner extends PartialType(
-  OmitType(ResponsePetDto, ['petOwner', 'petOwnerId'] as const),
-) {}
+export class CreatePetWithOwnerDto extends OmitType(CreatePetDto, [
+  'petOwnerId',
+] as const) {}
