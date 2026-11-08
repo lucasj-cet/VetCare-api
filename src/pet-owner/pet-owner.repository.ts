@@ -61,9 +61,17 @@ export class PetOwnerRepository {
   }
 
   async existsByCpf(cpf: string) {
-    // sem filtrar deletedAt: o unique do banco vale para removidos também
+  
     const found = await this.prisma.petOwner.findUnique({
       where: { cpf },
+      select: { id: true },
+    });
+    return !!found;
+  }
+    async existsByEmail(email: string) {
+  
+    const found = await this.prisma.petOwner.findUnique({
+      where: { email },
       select: { id: true },
     });
     return !!found;

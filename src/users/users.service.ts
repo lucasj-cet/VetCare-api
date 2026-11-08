@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
@@ -61,7 +61,14 @@ export class UsersService {
       porpose: 'invite'
     }
     const inviteToken = await this.jwtService.sign(payload)
-    this.mailService.sendConfirmationEmail(data.email, inviteToken)
+
+    try{
+      await this.mailService.sendConfirmationEmail(data.email, inviteToken)
+    }catch(er)
+    {
+      throw new InternalServerErrorException(er);
+    }
+  
     return HttpStatus.CREATED
   }
 

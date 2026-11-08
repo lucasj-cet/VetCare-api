@@ -4,7 +4,6 @@ import { ListPetOwnersQueryDto } from './dto/list-petowner-query.dto';
 import { UpdatePetOwnerDto } from './dto/update-pet-owner.dto';
 import { PetOwnerRepository } from './pet-owner.repository';
 import { plainToInstance } from 'class-transformer';
-import { Prisma } from './../generated/prisma/client';
 import { PetRepository } from '../pet/pet.repository';
 import { PetOwnerResponseDto } from './dto/response-pet-owner.dto';
 
@@ -24,8 +23,8 @@ async list({ search, page }: ListPetOwnersQueryDto) {
 }
 
   async create(dto: CreatePetOwnerDto) {
-  if (await this.repository.existsByCpf(dto.cpf)) {
-    throw new ConflictException('Já existe um tutor com este CPF');
+  if (await this.repository.existsByCpf(dto.cpf) || await this.repository.existsByEmail(dto.email)) {
+    throw new ConflictException('Já existe um tutor com este cpf ou email');
   }
 
   const { pets, ...ownerData } = dto;
