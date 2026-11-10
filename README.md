@@ -30,7 +30,7 @@ A solução suporta as principais operações operacionais e clínicas da instit
 
 ## ⚠️ Pré-requisitos
 
-> **AVISO OBRIGATÓRIO:** para rodar a aplicação localmente, é **indispensável ter o Docker e o Docker Compose instalados e em execução** no seu sistema. O banco de dados PostgreSQL é provisionado via contêiner Docker.
+> **AVISO OBRIGATÓRIO:** para rodar a aplicação localmente, é **indispensável ter o Docker instalado e em execução** no seu sistema. O banco de dados PostgreSQL é provisionado via contêiner Docker.
 
 Além disso, é necessário ter instalado:
 
