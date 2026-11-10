@@ -1,126 +1,91 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+```markdown
+# 🐾 VetCare API - Sistema de Gestão Veterinária
 
-## Description
+## 📖 Descrição do Projeto
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A **VetCare API** é o *back-end* da plataforma de gestão de clínicas veterinárias **VetCare**. Desenvolvida utilizando o framework **NestJS** (Express) com **TypeScript**, a API adota uma arquitetura em camadas segura, desacoplada e fortemente tipada, integrada ao banco de dados relacional **PostgreSQL** por meio do **Prisma ORM**.
 
-## Project setup
+A solução suporta as principais operações operacionais e clínicas da instituição:
+* **Autenticação & Controle de Acesso (RBAC):** Autenticação *stateless* com **JWT**, senhas criptografadas via **bcrypt** e controle de permissões por papéis (**ADMIN**, **Veterinário**, **Recepcionista**).
+* **Gestão de Usuários:** Manutenção completa de operadores com suporte à desativação de conta e disparo automatizado de credenciais via **Nodemailer**.
+* **Gestão de Tutores e Animais:** Cadastro unificado (Tutor + Animal na mesma requisição), vínculo posterior de novos animais e preservação de histórico via **soft-delete**.
+* **Agendamentos & Consultas:** Controle de agenda médica com validação de conflitos de horário (*double-booking*).
+* **Procedimentos & Prontuários:** Registros imutáveis de atendimentos, exames diagnósticos e aplicação de vacinas.
 
+---
+
+## ⚠️ Pré-requisitos
+
+> **AVISO OBRIGATÓRIO:** Para rodar a aplicação localmente, é **indispensável ter o Docker e o Docker Compose instalados e em execução** no seu sistema. O banco de dados PostgreSQL é provisionado via contêiner Docker.
+
+---
+
+## 🚀 Passo a Passo para Rodar Localmente
+
+Siga as instruções abaixo executando os comandos destacados no seu terminal a partir da pasta raiz do projeto.
+
+### 1. Instalar as dependências
+Execute no terminal para baixar todas as dependências listadas no `package.json`:
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
-
+### 2. Configurar o arquivo de variáveis de ambiente
+Crie um arquivo `.env` na pasta raiz do projeto e copie as configurações do arquivo `.env.example`:
 ```bash
-# development
-$ npm run start
+# No terminal (Linux/macOS):
+cp .env.example .env
 
-# watch mode
-$ npm run start:dev
+# No terminal (Windows PowerShell):
+copy .env.example .env
+```
+*(Você também pode criar o arquivo `.env` manualmente na raiz e colar as variáveis presentes em `.env.example`).*
 
-# production mode
-$ npm run start:prod
+### 3. Iniciar os serviços no Docker
+Com o serviço do Docker rodando na máquina, suba o contêiner do banco de dados em segundo plano executando no terminal:
+```bash
+docker-compose up -d
 ```
 
-## Run tests
-
+### 4. Executar as migrações do banco de dados (Prisma)
+Aplique as *migrations* do Prisma no terminal para criar o esquema de tabelas e relacionamentos no PostgreSQL:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma migrate dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
+### 5. Popular o banco de dados (Seed)
+Execute o script de população inicial (*seed*) no terminal para cadastrar os dados de teste e usuários iniciais:
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npx tsx src/prisma/seed.ts
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Observability
-
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
-
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
-
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-This project is already instrumented. To connect it, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
-
+### 6. Iniciar a API no modo desenvolvimento
+Inicie a aplicação NestJS no terminal com suporte a recarregamento automático (*watch mode*):
 ```bash
-$ npx @nestjs/observe link
+nest start --watch
 ```
 
-It writes the app key and secret into `.env` and makes every `nest start` script (`start`, `start:dev`, `start:debug`) load it. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
+Após a execução, a API estará pronta para receber requisições em `http://localhost:3000` (ou na porta definida no arquivo `.env`).
+```
+---
 
-Or do it by hand: create an application and an API key at [observe.nestjs.com](https://observe.nestjs.com), and set the pair as `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment the app runs in.
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+## 🔐 Credenciais de Teste & Acesso
 
-## Resources
+Após popular o banco de dados via `seed.ts`, utilize as credenciais padrão abaixo para autenticação:
 
-Check out a few resources that may come in handy when working with NestJS:
+### 👤 Acesso Administrador
+* **Usuário:** `admin@vetcare.com`
+* **Senha:** `ADMIN`
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 📧 Caixa de E-mails de Teste (Ethereal Email)
+Para visualizar os e-mails de convite e notificações enviadas pelo **Nodemailer**, acesse a plataforma do [Ethereal Email] com os seguintes dados:
+* **Usuário:** `jared.kihn@ethereal.email`
+* **Senha:** `jwpaj5WaYhapYXaMzA`
+```
+```markdown
+---
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
