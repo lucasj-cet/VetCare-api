@@ -34,7 +34,7 @@ A solução suporta as principais operações operacionais e clínicas da instit
 
 Além disso, é necessário ter instalado:
 
-- [Node.js](https://nodejs.org/) (versão LTS recomendada)
+- [Node.js](https://nodejs.org/) (v24.15.0)
 - npm
 
 ---
